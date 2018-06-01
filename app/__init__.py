@@ -2,7 +2,7 @@ from flask import Flask
 from config import config
 
 
-def create_app(config_mode):
+def create_app(config_mode='development'):
     app = Flask(__name__)
     app.config.from_object(config[config_mode])
     config[config_mode].init_app(app)

@@ -1,1 +1,12 @@
-.idea/
+# Created by .ignore support plugin (hsz.mobi)
+.gitignore
+.idea/bookService.iml
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/vcs.xml
+.idea/modules.xml
+.idea/workspace.xml
+__pycache__/
+app/__pycache__/
+app/main/__pycache__/
+venv/

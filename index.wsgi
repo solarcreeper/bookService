@@ -1,4 +1,5 @@
-# -*- coding:utf8 -*-
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
 import sys
 import logging
 logging.basicConfig(stream=sys.stderr)

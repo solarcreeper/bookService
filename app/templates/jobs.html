@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Jobs{% endblock %}
+{% block navbar %}
+    <section class="content-header">
+        <h1>Jobs</h1>
+        <ol class="breadcrumb">
+            <li><a href="{{ url_for('main.index') }}"><i class="fa fa-home"></i><span>Home</span></a></li>
+            <li class="active">Jobs</li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <div class="row" id="row-btn">
+        <button type="button" class="btn btn-sucess">Stop</button>
+        <button type="button" class="btn btn-sucess">Rerun</button>
+        <button type="button" class="btn btn-sucess">Refresh</button>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    {% include 'message.html' %}
+                </div>
+                <div class="box-body">
+                    {% if form %}
+                        <table class="table table-bordered" id="dataTable">
+                            <tr>
+                                <th>ID</th>
+                                <th>job name</th>
+                                <th>job content</th>
+                            </tr>
+                            {% for row in form.content %}
+                                <tr>
+                                    <td>{{ row._id }}</td>
+                                    <td>{{ row.name }}</td>
+                                    <td>{{ row.job_content }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endif %}
+                    <div class="box-footer clearfix">
+                        {% if form %}
+                            <ul class="pagination pagination-sm no-margin pull-right">
+                                <li><a href="#">&laquo;</a></li>
+                                {% for i in range(1, form.total_page+ 1) %}
+                                    {% if i == form.page %}
+                                        <li><a href="?page={{ i }}"><b>{{ i }}</b></a></li>
+                                    {% else %}
+                                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                <li><a href="#">&raquo;</a></li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <table class="table" id="job-data">
+                <tr>
+                    <td>ID</td>
+                    <td>ID</td>
+                </tr>
+                <tr>
+                    <td>ID</td>
+                    <td>ID</td>
+
+                </tr>
+                <tr>
+                    <td>ID</td>
+                    <td>ID</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('.table-bordered tr').click(function () {
+            console.log("click")
+        });
+    </script>
+{% endblock %}

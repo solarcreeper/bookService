@@ -118,3 +118,10 @@ def flash_errors(form):
                 getattr(form, field).label.text,
                 error
             ))
+
+
+def query_to_list(query):
+    result = []
+    for q in query:
+        result.append(q)
+    return result

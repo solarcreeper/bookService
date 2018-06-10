@@ -5,39 +5,38 @@ import math
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from app import utils
-from app.models import CfgNotify
+from app.models import CfgNotify, ConfigJob
 from app.main.forms import CfgNotifyForm
+from app.utils import query_to_list
 from . import main
 
 logger = get_logger(__name__)
 cfg = get_config()
-
+PAGE_COUNT = 14
 
 # 通用列表查询
-def common_list(DynamicModel, view):
+def job_list(view):
     # 接收参数
     action = request.args.get('action')
     id = request.args.get('id')
     page = int(request.args.get('page')) if request.args.get('page') else 1
-    length = int(request.args.get('length')) if request.args.get('length') else cfg.ITEMS_PER_PAGE
+    length = int(request.args.get('length')) if request.args.get('length') else PAGE_COUNT
 
     # 删除操作
     if action == 'del' and id:
-        try:
-            DynamicModel.get(DynamicModel.id == id).delete_instance()
-            flash('删除成功')
-        except:
-            flash('删除失败')
+        pass
 
     # 查询列表
-    query = DynamicModel.select()
-    total_count = query.count()
+    query = get_config().JOB_COLLECTION.find().skip((page-1)*PAGE_COUNT).limit(PAGE_COUNT)
+    data_list = query_to_list(query)
+    total_count = get_config().JOB_COLLECTION.find().count()
+    total_page = int(total_count/PAGE_COUNT)
 
-    # 处理分页
-    if page: query = query.paginate(page, length)
+    # # 处理分页
+    # if page: query = query.paginate(page, length)
 
-    dict = {'content': utils.query_to_list(query), 'total_count': total_count,
-            'total_page': math.ceil(total_count / length), 'page': page, 'length': length}
+    dict = {'content':data_list, 'total_count': total_count,
+            'total_page': total_page, 'page': page, 'length': length}
     return render_template(view, form=dict, current_user=current_user)
 
 
@@ -84,14 +83,14 @@ def index():
 
 
 # 通知方式查询
-@main.route('/notifylist', methods=['GET', 'POST'])
+@main.route('/jobs', methods=['GET', 'POST'])
 @login_required
-def notifylist():
-    return common_list(CfgNotify, 'notifylist.html')
+def jobs():
+    return job_list('jobs.html')
 
 
 # 通知方式配置
-@main.route('/notifyedit', methods=['GET', 'POST'])
+@main.route('/templates', methods=['GET', 'POST'])
 @login_required
-def notifyedit():
-    return common_edit(CfgNotify, CfgNotifyForm(), 'notifyedit.html')
+def templates():
+    return common_edit(CfgNotify, CfgNotifyForm(), 'templates.html')
